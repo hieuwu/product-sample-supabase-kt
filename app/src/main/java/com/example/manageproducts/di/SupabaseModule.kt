@@ -11,6 +11,8 @@ import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.storage.Storage
+import io.github.jan.supabase.storage.storage
 import javax.inject.Singleton
 
 
@@ -27,6 +29,7 @@ object SupabaseModule {
         ) {
             install(Postgrest)
             install(GoTrue)
+            install(Storage)
         }
     }
 
@@ -40,6 +43,13 @@ object SupabaseModule {
     @Singleton
     fun provideSupabaseGoTrue(client: SupabaseClient): GoTrue {
         return client.gotrue
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideSupabaseStorage(client: SupabaseClient): Storage {
+        return client.storage
     }
 
 }
