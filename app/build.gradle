@@ -85,6 +85,7 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     annotationProcessor "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // For instrumentation tests
     androidTestImplementation  "com.google.dagger:hilt-android-testing:$hilt_version"
@@ -92,6 +93,5 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     implementation 'androidx.navigation:navigation-compose:2.5.3'
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.24.13-rc'
 }
