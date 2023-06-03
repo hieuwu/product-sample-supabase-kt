@@ -8,7 +8,7 @@ class UploadImageUseCaseImpl @Inject constructor(
     private val imageRepository: ImageRepository
 ): UploadImageUseCase {
     override suspend fun execute(input: UploadImageUseCase.Input): UploadImageUseCase.Output {
-        imageRepository.uploadImage(input.imageByteArray)
+        imageRepository.uploadImage(input.fileName, input.imageByteArray)
         return UploadImageUseCase.Output.Success
     }
 }

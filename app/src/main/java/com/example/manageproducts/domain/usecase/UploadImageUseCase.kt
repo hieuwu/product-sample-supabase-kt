@@ -1,8 +1,8 @@
 package com.example.manageproducts.domain.usecase
 
 interface UploadImageUseCase : UseCase<UploadImageUseCase.Input, UploadImageUseCase.Output> {
-    class Input(val imageByteArray: ByteArray)
+    class Input(val fileName: String, val imageByteArray: ByteArray)
     sealed class Output {
-        object Success: Output()
+        object Success : Output()
     }
 }
