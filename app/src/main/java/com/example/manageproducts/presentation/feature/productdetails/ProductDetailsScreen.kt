@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,11 +33,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.manageproducts.R
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
-import java.io.FileInputStream
 import java.io.InputStream
-import java.io.InputStreamReader
 
 @OptIn(ExperimentalCoilApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -184,12 +180,13 @@ private fun getBytes(inputStream: InputStream): ByteArray {
     val byteBuffer = ByteArrayOutputStream()
     val bufferSize = 1024
     val buffer = ByteArray(bufferSize)
-    while (inputStream.read(buffer) != -1) {
-        val length = inputStream.read(buffer)
-        byteBuffer.write(buffer, 0, length)
+    var len = 0
+    while (inputStream.read(buffer).also { len = it }  != -1) {
+        byteBuffer.write(buffer, 0, len)
     }
     return byteBuffer.toByteArray()
 }
+
 
 private fun uriToByteArray(contentResolver: ContentResolver, uri: Uri): ByteArray {
     if (uri == Uri.EMPTY) {

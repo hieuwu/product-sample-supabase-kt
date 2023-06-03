@@ -81,5 +81,4 @@ class ProductDetailsViewModel @Inject constructor(
         }
     }
 
-
 }
