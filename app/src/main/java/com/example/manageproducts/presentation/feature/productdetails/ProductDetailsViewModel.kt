@@ -76,9 +76,13 @@ class ProductDetailsViewModel @Inject constructor(
                 )
             )
             if (image.isNotEmpty()) {
-                uploadImageUseCase.execute(UploadImageUseCase.Input(imageByteArray = image))
+                uploadImageUseCase.execute(
+                    UploadImageUseCase.Input(
+                        "image_${_product.value?.id}",
+                        imageByteArray = image
+                    )
+                )
             }
         }
     }
-
 }
