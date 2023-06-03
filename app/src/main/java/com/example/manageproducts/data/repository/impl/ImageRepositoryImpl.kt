@@ -9,9 +9,13 @@ class ImageRepositoryImpl @Inject constructor(
     private val storage: Storage
 ) : ImageRepository {
     override suspend fun uploadImage(image: ByteArray) {
-        storage["Product Image"].update(
-            "Product Image", image,
+        storage["Product%20Image"].upload(
+            "newimage.png", image,
             upsert = true
         )
+    }
+
+    override suspend fun getImage() {
+        TODO("Not yet implemented")
     }
 }
