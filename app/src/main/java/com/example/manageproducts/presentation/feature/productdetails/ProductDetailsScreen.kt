@@ -1,13 +1,18 @@
 package com.example.manageproducts.presentation.feature.productdetails
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,15 +20,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.example.manageproducts.R
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
+import java.io.InputStream
+import java.io.InputStreamReader
 
+@OptIn(ExperimentalCoilApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProductDetailsScreen(
@@ -68,34 +85,36 @@ fun ProductDetailsScreen(
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
+            val contentResolver = LocalContext.current.contentResolver
+
             //TODO Update this to handle update image to storage
-//            val galleryLauncher =
-//                rememberLauncherForActivityResult(ActivityResultContracts.GetContent())
-//                { uri ->
-//                    uri?.let {
-//                        productImage = it
-//                    }
-//                }
-//
-//            Image(
-//                painter = rememberImagePainter(productImage),
-//                contentScale = ContentScale.Fit,
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .padding(16.dp, 8.dp)
-//                    .size(100.dp)
-//                    .align(Alignment.CenterHorizontally)
-//            )
-//            IconButton(modifier = modifier.align(alignment = Alignment.CenterHorizontally),
-//                onClick = {
-//                    galleryLauncher.launch("image/*")
-//                }) {
-//                Icon(
-//                    imageVector = Icons.Filled.Edit,
-//                    contentDescription = null,
-//                    tint = MaterialTheme.colorScheme.primary
-//                )
-//            }
+            val galleryLauncher =
+                rememberLauncherForActivityResult(ActivityResultContracts.GetContent())
+                { uri ->
+                    uri?.let {
+                        productImage = it
+                    }
+                }
+
+            Image(
+                painter = rememberImagePainter(productImage),
+                contentScale = ContentScale.Fit,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(16.dp, 8.dp)
+                    .size(100.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+            IconButton(modifier = modifier.align(alignment = Alignment.CenterHorizontally),
+                onClick = {
+                    galleryLauncher.launch("image/*")
+                }) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
             OutlinedTextField(
                 label = {
                     Text(
@@ -134,7 +153,8 @@ fun ProductDetailsScreen(
             Button(
                 modifier = modifier.fillMaxWidth(),
                 onClick = {
-                    viewModel.onSaveProduct()
+                    val image = uriToByteArray(contentResolver, productImage)
+                    viewModel.onSaveProduct(image)
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
                             message = "Product updated successfully !",
@@ -157,4 +177,27 @@ fun ProductDetailsScreen(
         }
 
     }
+}
+
+
+private fun getBytes(inputStream: InputStream): ByteArray {
+    val byteBuffer = ByteArrayOutputStream()
+    val bufferSize = 1024
+    val buffer = ByteArray(bufferSize)
+    while (inputStream.read(buffer) != -1) {
+        val length = inputStream.read(buffer)
+        byteBuffer.write(buffer, 0, length)
+    }
+    return byteBuffer.toByteArray()
+}
+
+private fun uriToByteArray(contentResolver: ContentResolver, uri: Uri): ByteArray {
+    if (uri == Uri.EMPTY) {
+        return byteArrayOf()
+    }
+    val inputStream = contentResolver.openInputStream(uri)
+    if (inputStream != null) {
+        return getBytes(inputStream)
+    }
+    return byteArrayOf()
 }

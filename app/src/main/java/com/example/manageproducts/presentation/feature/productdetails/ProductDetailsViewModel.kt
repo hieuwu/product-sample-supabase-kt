@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.manageproducts.domain.model.Product
 import com.example.manageproducts.domain.usecase.GetProductDetailsUseCase
 import com.example.manageproducts.domain.usecase.UpdateProductUseCase
+import com.example.manageproducts.domain.usecase.UploadImageUseCase
 import com.example.manageproducts.presentation.navigation.ProductDetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class ProductDetailsViewModel @Inject constructor(
     private val getProductDetailsUseCase: GetProductDetailsUseCase,
     private val updateProductUseCase: UpdateProductUseCase,
+    private val uploadImageUseCase: UploadImageUseCase,
     savedStateHandle: SavedStateHandle,
 
     ) : ViewModel(), ProductDetailsContract {
@@ -64,7 +66,7 @@ class ProductDetailsViewModel @Inject constructor(
         _price.value = price
     }
 
-    override fun onSaveProduct() {
+    override fun onSaveProduct(image: ByteArray) {
         viewModelScope.launch {
             updateProductUseCase.execute(
                 UpdateProductUseCase.Input(
@@ -73,6 +75,9 @@ class ProductDetailsViewModel @Inject constructor(
                     name = _name.value
                 )
             )
+            if (image.isNotEmpty()) {
+                uploadImageUseCase.execute(UploadImageUseCase.Input(imageByteArray = image))
+            }
         }
     }
 

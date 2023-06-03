@@ -8,5 +8,5 @@ interface ProductDetailsContract {
     val name: Flow<String>
     val price: Flow<Double>
 
-    fun onSaveProduct()
+    fun onSaveProduct(image: ByteArray)
 }
