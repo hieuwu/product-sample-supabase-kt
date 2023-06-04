@@ -4,7 +4,9 @@ interface UpdateProductUseCase : UseCase<UpdateProductUseCase.Input, UpdateProdu
     class Input(
         val id: String,
         val name: String,
-        val price: Double
+        val price: Double,
+        val imageName: String,
+        val imageFile: ByteArray,
     )
 
     sealed class Output() {
