@@ -75,7 +75,8 @@ fun ProductDetailsScreen(
     ) {
         val name = viewModel.name.collectAsState(initial = "")
         val price = viewModel.price.collectAsState(initial = 0.0)
-        var productImage by remember { mutableStateOf<Uri>(Uri.EMPTY) }
+        val imageUrl = viewModel.imageUrl.collectAsState(initial = "").value
+        var productImage by remember { mutableStateOf<Uri>(Uri.parse(imageUrl)) }
         Column(
             modifier = modifier
                 .padding(16.dp)
@@ -93,7 +94,7 @@ fun ProductDetailsScreen(
                 }
 
             Image(
-                painter = rememberImagePainter(productImage),
+                painter = rememberImagePainter(Uri.parse(imageUrl)),
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
                 modifier = Modifier
@@ -181,7 +182,7 @@ private fun getBytes(inputStream: InputStream): ByteArray {
     val bufferSize = 1024
     val buffer = ByteArray(bufferSize)
     var len = 0
-    while (inputStream.read(buffer).also { len = it }  != -1) {
+    while (inputStream.read(buffer).also { len = it } != -1) {
         byteBuffer.write(buffer, 0, len)
     }
     return byteBuffer.toByteArray()
