@@ -1,13 +1,16 @@
 package com.example.manageproducts.data.repository.impl
 
+import com.example.manageproducts.BuildConfig
 import com.example.manageproducts.data.network.dto.ProductDto
 import com.example.manageproducts.data.repository.ProductRepository
 import com.example.manageproducts.domain.model.Product
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.storage.Storage
 import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(
-    private val postgrest: Postgrest
+    private val postgrest: Postgrest,
+    private val storage: Storage,
 ) : ProductRepository {
     override suspend fun createProduct(product: Product): Boolean {
         return try {
@@ -31,8 +34,8 @@ class ProductRepositoryImpl @Inject constructor(
 
     override suspend fun getProduct(id: String): ProductDto {
         return postgrest["products"].select {
-                eq("id", id)
-            }.decodeSingle<ProductDto>()
+            eq("id", id)
+        }.decodeSingle<ProductDto>()
     }
 
     override suspend fun deleteProduct(id: String) {
@@ -41,12 +44,28 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateProduct(id: String,name: String, price: Double) {
+    override suspend fun updateProduct(
+        id: String,
+        name: String,
+        price: Double,
+        imageName: String,
+        imageFile: ByteArray
+    ) {
+        val imageUrl =
+            storage["Product%20Image"].upload(
+                path = "$imageName.png",
+                data = imageFile,
+                upsert = false
+            )
         postgrest["products"].update({
             set("name", name)
             set("price", price)
+            set("image", buildImageUrl(imageFileName = imageUrl))
         }) {
             eq("id", id)
         }
     }
+
+    private fun buildImageUrl(imageFileName: String) =
+        "${BuildConfig.SUPABASE_URL}/storage/v1/object/public/${imageFileName}".replace(" ", "%20")
 }

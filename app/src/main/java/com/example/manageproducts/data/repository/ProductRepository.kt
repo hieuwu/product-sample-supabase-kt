@@ -8,5 +8,7 @@ interface ProductRepository {
     suspend fun getProducts(): List<ProductDto>?
     suspend fun getProduct(id: String): ProductDto
     suspend fun deleteProduct(id: String)
-    suspend fun updateProduct(id: String, name: String, price: Double)
+    suspend fun updateProduct(
+        id: String, name: String, price: Double, imageName: String, imageFile: ByteArray
+    )
 }
