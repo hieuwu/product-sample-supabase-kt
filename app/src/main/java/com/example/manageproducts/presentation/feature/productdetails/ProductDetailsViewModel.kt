@@ -31,6 +31,9 @@ class ProductDetailsViewModel @Inject constructor(
     private val _price = MutableStateFlow(0.0)
     override val price: Flow<Double> = _price
 
+    private val _imageUrl = MutableStateFlow("")
+    override val imageUrl: Flow<String> = _imageUrl
+
     init {
         val productId = savedStateHandle.get<String>(ProductDetailsDestination.productId)
         productId?.let {
@@ -50,6 +53,7 @@ class ProductDetailsViewModel @Inject constructor(
                     _product.emit(result.data)
                     _name.emit(result.data.name)
                     _price.emit(result.data.price)
+                    _imageUrl.emit(result.data.image)
                 }
                 is GetProductDetailsUseCase.Output.Failure -> {
 
@@ -72,16 +76,18 @@ class ProductDetailsViewModel @Inject constructor(
                 UpdateProductUseCase.Input(
                     id = _product.value?.id ?: "",
                     price = _price.value,
-                    name = _name.value
+                    name = _name.value,
+                    imageFile = image,
+                    imageName = "image_${_product.value?.id}",
                 )
             )
             if (image.isNotEmpty()) {
-                uploadImageUseCase.execute(
-                    UploadImageUseCase.Input(
-                        "image_${_product.value?.id}",
-                        imageByteArray = image
-                    )
-                )
+//                uploadImageUseCase.execute(
+//                    UploadImageUseCase.Input(
+//                        "image_${_product.value?.id}",
+//                        imageByteArray = image
+//                    )
+//                )
             }
         }
     }
