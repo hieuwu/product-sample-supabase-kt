@@ -7,6 +7,7 @@ interface ProductDetailsContract {
     val product: Flow<Product?>
     val name: Flow<String>
     val price: Flow<Double>
+    val imageUrl: Flow<String>
 
     fun onSaveProduct(image: ByteArray)
 }
