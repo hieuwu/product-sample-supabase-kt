@@ -11,7 +11,7 @@ Demonstration and best practices of how to use Supabase database for CRUD operat
 
 ### Setup
 Android Studio with SDK 30 or above
-Open local.properties file, add
+Open `local.properties` file, add these
 ```kotlin
 API_KEY=YOUR_SUPABASE_API_KEY
 SECRET=YOUR_SUPABASE_SECRET
