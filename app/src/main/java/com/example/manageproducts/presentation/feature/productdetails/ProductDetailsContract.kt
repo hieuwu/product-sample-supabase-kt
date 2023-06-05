@@ -10,4 +10,5 @@ interface ProductDetailsContract {
     val imageUrl: Flow<String>
 
     fun onSaveProduct(image: ByteArray)
+    fun onImageChange(url: String)
 }

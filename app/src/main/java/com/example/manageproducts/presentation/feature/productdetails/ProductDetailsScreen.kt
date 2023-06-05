@@ -75,26 +75,23 @@ fun ProductDetailsScreen(
     ) {
         val name = viewModel.name.collectAsState(initial = "")
         val price = viewModel.price.collectAsState(initial = 0.0)
-        val imageUrl = viewModel.imageUrl.collectAsState(initial = "").value
-        var productImage by remember { mutableStateOf<Uri>(Uri.parse(imageUrl)) }
+        var imageUrl = Uri.parse(viewModel.imageUrl.collectAsState(initial = "").value)
         Column(
             modifier = modifier
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
             val contentResolver = LocalContext.current.contentResolver
-
-            //TODO Update this to handle update image to storage
             val galleryLauncher =
                 rememberLauncherForActivityResult(ActivityResultContracts.GetContent())
                 { uri ->
                     uri?.let {
-                        productImage = it
+                        viewModel.onImageChange(it.toString())
                     }
                 }
 
             Image(
-                painter = rememberImagePainter(Uri.parse(imageUrl)),
+                painter = rememberImagePainter(imageUrl),
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
                 modifier = Modifier
@@ -150,7 +147,7 @@ fun ProductDetailsScreen(
             Button(
                 modifier = modifier.fillMaxWidth(),
                 onClick = {
-                    val image = uriToByteArray(contentResolver, productImage)
+                    val image = uriToByteArray(contentResolver, imageUrl)
                     viewModel.onSaveProduct(image)
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
