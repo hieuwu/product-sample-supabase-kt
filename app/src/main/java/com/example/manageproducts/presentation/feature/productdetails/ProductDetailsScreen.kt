@@ -76,17 +76,20 @@ fun ProductDetailsScreen(
         val name = viewModel.name.collectAsState(initial = "")
         val price = viewModel.price.collectAsState(initial = 0.0)
         var imageUrl = Uri.parse(viewModel.imageUrl.collectAsState(initial = "").value)
+        val contentResolver = LocalContext.current.contentResolver
+
         Column(
             modifier = modifier
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-            val contentResolver = LocalContext.current.contentResolver
             val galleryLauncher =
                 rememberLauncherForActivityResult(ActivityResultContracts.GetContent())
                 { uri ->
                     uri?.let {
-                        viewModel.onImageChange(it.toString())
+                        if (it.toString() != imageUrl.toString()) {
+                            viewModel.onImageChange(it.toString())
+                        }
                     }
                 }
 
@@ -147,8 +150,12 @@ fun ProductDetailsScreen(
             Button(
                 modifier = modifier.fillMaxWidth(),
                 onClick = {
-                    val image = uriToByteArray(contentResolver, imageUrl)
-                    viewModel.onSaveProduct(image)
+                    if (imageUrl.host?.contains("supabase") == true) {
+                        viewModel.onSaveProduct(image = byteArrayOf())
+                    } else {
+                        val image = uriToByteArray(contentResolver, imageUrl)
+                        viewModel.onSaveProduct(image = image)
+                    }
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
                             message = "Product updated successfully !",

@@ -51,18 +51,27 @@ class ProductRepositoryImpl @Inject constructor(
         imageName: String,
         imageFile: ByteArray
     ) {
-        val imageUrl =
-            storage["Product%20Image"].upload(
-                path = "$imageName.png",
-                data = imageFile,
-                upsert = false
-            )
-        postgrest["products"].update({
-            set("name", name)
-            set("price", price)
-            set("image", buildImageUrl(imageFileName = imageUrl))
-        }) {
-            eq("id", id)
+        if (imageFile.isNotEmpty()) {
+            val imageUrl =
+                storage["Product%20Image"].upload(
+                    path = "$imageName.png",
+                    data = imageFile,
+                    upsert = true
+                )
+            postgrest["products"].update({
+                set("name", name)
+                set("price", price)
+                set("image", buildImageUrl(imageFileName = imageUrl))
+            }) {
+                eq("id", id)
+            }
+        } else {
+            postgrest["products"].update({
+                set("name", name)
+                set("price", price)
+            }) {
+                eq("id", id)
+            }
         }
     }
 
