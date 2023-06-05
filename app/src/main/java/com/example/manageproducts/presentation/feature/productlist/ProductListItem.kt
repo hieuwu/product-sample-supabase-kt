@@ -1,6 +1,5 @@
 package com.example.manageproducts.presentation.feature.productlist
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,9 +35,9 @@ fun ProductListItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Image(
-                painter =   rememberImagePainter(product.image),
-                contentScale = ContentScale.Fit,
                 contentDescription = null,
+                painter = rememberImagePainter(product.image),
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .padding(16.dp, 8.dp)
                     .size(64.dp)

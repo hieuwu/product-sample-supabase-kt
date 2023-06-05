@@ -32,6 +32,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import com.example.manageproducts.domain.model.Product
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.example.manageproducts.presentation.navigation.AddProductDestination
@@ -137,7 +138,7 @@ fun ProductListScreen(
                                                 item.id
                                             )
                                         )
-                                    }
+                                    },
                                 )
                             },
                             directions = setOf(DismissDirection.EndToStart),
