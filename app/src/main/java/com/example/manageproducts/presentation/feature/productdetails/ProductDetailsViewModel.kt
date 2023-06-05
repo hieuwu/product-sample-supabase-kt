@@ -91,4 +91,8 @@ class ProductDetailsViewModel @Inject constructor(
             }
         }
     }
+
+    override fun onImageChange(url: String) {
+        _imageUrl.value = url
+    }
 }
