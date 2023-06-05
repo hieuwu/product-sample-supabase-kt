@@ -19,6 +19,7 @@ class GetProductsUseCaseImpl @Inject constructor(
                         id = it.id ?: "",
                         name = it.name,
                         price = it.price,
+                        image = it.image ?: ""
                     )
                 })
             } ?: GetProductsUseCase.Output.Failure
