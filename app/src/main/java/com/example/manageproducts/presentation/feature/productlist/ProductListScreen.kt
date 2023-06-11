@@ -37,7 +37,6 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.example.manageproducts.presentation.navigation.AddProductDestination
 import com.example.manageproducts.presentation.navigation.ProductDetailsDestination
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun ProductListScreen(
@@ -47,24 +46,6 @@ fun ProductListScreen(
 ) {
     val isLoading by viewModel.isLoading.collectAsState(initial = false)
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
-    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
-    // If `lifecycleOwner` changes, dispose and reset the effect
-    DisposableEffect(lifecycleOwner) {
-        // Create an observer that triggers our remembered callbacks
-        // for sending analytics events
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                viewModel.getProducts()
-            }
-        }
-        // Add the observer to the lifecycle
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        // When the effect leaves the Composition, remove the observer
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
     SwipeRefresh(state = swipeRefreshState, onRefresh = { viewModel.getProducts() }) {
         Scaffold(
             topBar = {

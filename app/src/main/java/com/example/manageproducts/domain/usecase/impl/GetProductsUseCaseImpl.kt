@@ -1,5 +1,6 @@
 package com.example.manageproducts.domain.usecase.impl
 
+import com.example.manageproducts.data.network.dto.ProductDto
 import com.example.manageproducts.data.repository.ProductRepository
 import com.example.manageproducts.domain.model.Product
 import com.example.manageproducts.domain.usecase.GetProductsUseCase
@@ -25,3 +26,4 @@ class GetProductsUseCaseImpl @Inject constructor(
             } ?: GetProductsUseCase.Output.Failure
         }
 }
+
