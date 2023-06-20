@@ -29,3 +29,8 @@ object AddProductDestination : Destination {
     override val route = "add_product"
     override val title = "Add Product"
 }
+
+object AuthenticationFeature: Destination {
+    override val route = "authentication"
+    override val title = "Authentication"
+}
