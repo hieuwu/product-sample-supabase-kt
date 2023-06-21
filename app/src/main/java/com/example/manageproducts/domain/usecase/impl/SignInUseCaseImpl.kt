@@ -1,21 +1,21 @@
 package com.example.manageproducts.domain.usecase.impl
 
 import com.example.manageproducts.data.repository.AuthenticateRepository
-import com.example.manageproducts.domain.usecase.AuthenticateUseCase
+import com.example.manageproducts.domain.usecase.SignInUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AuthenticateUseCaseImpl @Inject constructor(
+class SignInUseCaseImpl @Inject constructor(
     private val authenticateRepository: AuthenticateRepository
-) : AuthenticateUseCase {
-    override suspend fun execute(input: AuthenticateUseCase.Input): AuthenticateUseCase.Output {
+) : SignInUseCase {
+    override suspend fun execute(input: SignInUseCase.Input): SignInUseCase.Output {
         return withContext(Dispatchers.IO) {
             val result = authenticateRepository.logIn(input.email, input.password)
             if (result) {
-                AuthenticateUseCase.Output.Success
+                SignInUseCase.Output.Success
             } else {
-                AuthenticateUseCase.Output.Failure
+                SignInUseCase.Output.Failure
             }
         }
     }
