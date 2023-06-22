@@ -1,21 +1,27 @@
 package com.example.manageproducts.presentation.feature.authentication
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.manageproducts.domain.usecase.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
-
-): ViewModel() {
+    private val signInUseCase: SignInUseCase
+) : ViewModel() {
 
     private val _email = MutableStateFlow<String>("")
     val email: Flow<String> = _email
 
     private val _password = MutableStateFlow("")
     val password = _password
+
+    private val _message = MutableStateFlow("")
+    val message = _message
 
     fun onEmailChange(email: String) {
         _email.value = email
@@ -26,6 +32,21 @@ class AuthenticationViewModel @Inject constructor(
     }
 
     fun onLogin() {
-
+        viewModelScope.launch {
+            val result = signInUseCase.execute(
+                SignInUseCase.Input(
+                    email = _email.value,
+                    password = _password.value
+                )
+            )
+            when (result) {
+                is SignInUseCase.Output.Success -> {
+                    message.emit("Login successfully !")
+                }
+                else -> {
+                    message.emit("Login failed !")
+                }
+            }
+        }
     }
 }

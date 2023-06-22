@@ -10,7 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.manageproducts.presentation.navigation.AuthenticationFeature
+import com.example.manageproducts.presentation.navigation.AuthenticationDestination
+import com.example.manageproducts.presentation.navigation.SignUpDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,10 +69,16 @@ fun AuthenticationScreen(
                     viewModel.onPasswordChange(it)
                 },
             )
-            Button(modifier = modifier.fillMaxWidth().padding(top = 12.dp), onClick = {
-                navController.navigate(AuthenticationFeature.route)
+            Button(modifier = modifier.fillMaxWidth().padding(top = 12.dp),
+                onClick = {
+                    viewModel.onLogin()
             }) {
                 Text("Login")
+            }
+            OutlinedButton(modifier = modifier.fillMaxWidth().padding(top = 12.dp), onClick = {
+                navController.navigate(SignUpDestination.route)
+            }) {
+                Text("Sign up")
             }
         }
     }
