@@ -7,6 +7,7 @@ import com.example.manageproducts.presentation.feature.addproduct.AddProductScre
 import com.example.manageproducts.presentation.feature.authentication.AuthenticationScreen
 import com.example.manageproducts.presentation.feature.productdetails.ProductDetailsScreen
 import com.example.manageproducts.presentation.feature.productlist.ProductListScreen
+import com.example.manageproducts.presentation.feature.signup.SignUpScreen
 
 fun NavGraphBuilder.navRegistration(navController: NavController) {
     composable(ProductListDestination.route) {
@@ -15,8 +16,14 @@ fun NavGraphBuilder.navRegistration(navController: NavController) {
         )
     }
 
-    composable(AuthenticationFeature.route) {
+    composable(AuthenticationDestination.route) {
         AuthenticationScreen(
+            navController = navController
+        )
+    }
+
+    composable(SignUpDestination.route) {
+        SignUpScreen(
             navController = navController
         )
     }
@@ -26,6 +33,8 @@ fun NavGraphBuilder.navRegistration(navController: NavController) {
             navController = navController
         )
     }
+
+
     composable(route = "${ProductDetailsDestination.route}/{${ProductDetailsDestination.productId}}",
         arguments = ProductDetailsDestination.arguments) { navBackStackEntry ->
         val productName =
