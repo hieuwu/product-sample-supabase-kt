@@ -5,16 +5,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +28,10 @@ fun SignUpScreen(
     navController: NavController,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
+    val snackBarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
+        snackbarHost = { androidx.compose.material.SnackbarHost(snackBarHostState) },
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -86,13 +94,21 @@ fun SignUpScreen(
                 value = password.value,
                 onValueChange = {
                     viewModel.onPasswordChange(it)
+
                 },
             )
             Button(modifier = modifier
                 .fillMaxWidth()
-                .padding(top = 12.dp), onClick = {
-                viewModel.onSignUp()
-            }) {
+                .padding(top = 12.dp),
+                onClick = {
+                    viewModel.onSignUp()
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = "Create account successfully !",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }) {
                 Text("Sign up")
             }
         }
