@@ -30,7 +30,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.example.manageproducts.R
 import com.example.manageproducts.presentation.navigation.AddProductDestination
-import com.example.manageproducts.presentation.navigation.AuthenticationFeature
+import com.example.manageproducts.presentation.navigation.AuthenticationDestination
 import com.example.manageproducts.presentation.navigation.ProductDetailsDestination
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -82,7 +82,7 @@ fun ProductListScreen(
         ) { padding ->
             Column(modifier = modifier.padding(paddingValues = padding)) {
                 androidx.compose.material3.Button(modifier = modifier.fillMaxWidth(), onClick = {
-                    navController.navigate(AuthenticationFeature.route)
+                    navController.navigate(AuthenticationDestination.route)
                 }) {
                     Text("Authentication feature")
                 }
