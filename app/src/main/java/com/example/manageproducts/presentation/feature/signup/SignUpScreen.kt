@@ -15,13 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
@@ -94,18 +96,19 @@ fun SignUpScreen(
                 value = password.value,
                 onValueChange = {
                     viewModel.onPasswordChange(it)
-
                 },
             )
+            val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
             Button(modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp),
                 onClick = {
+                    localSoftwareKeyboardController?.hide()
                     viewModel.onSignUp()
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(
-                            message = "Create account successfully !",
-                            duration = SnackbarDuration.Short
+                            message = "Create account successfully. Sign in now!",
+                            duration = SnackbarDuration.Long
                         )
                     }
                 }) {
