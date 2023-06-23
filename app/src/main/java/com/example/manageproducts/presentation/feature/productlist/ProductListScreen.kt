@@ -81,7 +81,7 @@ fun ProductListScreen(
             }
         ) { padding ->
             Column(modifier = modifier.padding(paddingValues = padding)) {
-                androidx.compose.material3.Button(modifier = modifier.fillMaxWidth(), onClick = {
+                androidx.compose.material3.Button(modifier = modifier.fillMaxWidth().padding(20.dp), onClick = {
                     navController.navigate(AuthenticationDestination.route)
                 }) {
                     Text("Authentication feature")
