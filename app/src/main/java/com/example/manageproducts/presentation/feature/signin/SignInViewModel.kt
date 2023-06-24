@@ -1,4 +1,4 @@
-package com.example.manageproducts.presentation.feature.authentication
+package com.example.manageproducts.presentation.feature.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor(
+class SignInViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class AuthenticationViewModel @Inject constructor(
         _password.value = password
     }
 
-    fun onLogin() {
+    fun onSignIn() {
         viewModelScope.launch {
             val result = signInUseCase.execute(
                 SignInUseCase.Input(
