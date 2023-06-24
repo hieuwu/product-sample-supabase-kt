@@ -1,28 +1,38 @@
-package com.example.manageproducts.presentation.feature.authentication
+package com.example.manageproducts.presentation.feature.signin
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.manageproducts.presentation.navigation.AuthenticationDestination
 import com.example.manageproducts.presentation.navigation.SignUpDestination
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun AuthenticationScreen(
+fun SignInScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: AuthenticationViewModel = hiltViewModel()
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
+
+    val snackBarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
+        snackbarHost = { androidx.compose.material.SnackbarHost(snackBarHostState) },
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -46,7 +56,11 @@ fun AuthenticationScreen(
             )
         }
     ) { paddingValues ->
-        Column(modifier = modifier.padding(paddingValues).padding(20.dp)) {
+        Column(
+            modifier = modifier
+                .padding(paddingValues)
+                .padding(20.dp)
+        ) {
             val email = viewModel.email.collectAsState(initial = "")
             val password = viewModel.password.collectAsState()
             androidx.compose.material.OutlinedTextField(
@@ -75,20 +89,33 @@ fun AuthenticationScreen(
                 },
                 maxLines = 1,
                 shape = RoundedCornerShape(32),
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier
+                    .fillMaxWidth()
                     .padding(top = 12.dp),
                 value = password.value,
                 onValueChange = {
                     viewModel.onPasswordChange(it)
                 },
             )
-            Button(modifier = modifier.fillMaxWidth().padding(top = 12.dp),
+            val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
+            Button(modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp),
                 onClick = {
-                    viewModel.onLogin()
-            }) {
-                Text("Login")
+                    localSoftwareKeyboardController?.hide()
+                    viewModel.onSignIn()
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = "Sign in successfully !",
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                }) {
+                Text("Sign in")
             }
-            OutlinedButton(modifier = modifier.fillMaxWidth().padding(top = 12.dp), onClick = {
+            OutlinedButton(modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp), onClick = {
                 navController.navigate(SignUpDestination.route)
             }) {
                 Text("Sign up")
