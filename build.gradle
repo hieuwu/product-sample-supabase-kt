@@ -3,6 +3,10 @@ buildscript {
         compose_version = '1.2.0'
         hilt_version = '2.44.2'
     }
+    repositories {
+        google()  // Google's Maven repository
+    }
+
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'com.android.application' version '7.4.2' apply false
