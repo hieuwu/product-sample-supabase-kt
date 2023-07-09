@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.manageproducts.presentation.navigation.SignUpDestination
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -98,6 +100,23 @@ fun SignInScreen(
                 },
             )
             val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
+
+            Button(modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp),
+                onClick = {
+                    localSoftwareKeyboardController?.hide()
+                    viewModel.onGoogleSignIn()
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = "Sign in successfully !",
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                }) {
+                Text("Sign in with Google")
+            }
+
             Button(modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp),

@@ -3,6 +3,9 @@ package com.example.manageproducts.presentation.feature.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.manageproducts.domain.usecase.SignInUseCase
+import com.example.manageproducts.domain.usecase.SignInWithGoogleUseCase
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val signInUseCase: SignInUseCase
+    private val signInUseCase: SignInUseCase,
+    private val signInWithGoogleUseCase: SignInWithGoogleUseCase,
 ) : ViewModel() {
 
     private val _email = MutableStateFlow<String>("")
@@ -29,6 +33,12 @@ class SignInViewModel @Inject constructor(
 
     fun onPasswordChange(password: String) {
         _password.value = password
+    }
+
+    fun onGoogleSignIn() {
+        viewModelScope.launch {
+            signInWithGoogleUseCase.execute(SignInWithGoogleUseCase.Input())
+        }
     }
 
     fun onSignIn() {
