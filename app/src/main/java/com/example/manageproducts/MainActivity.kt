@@ -18,12 +18,22 @@ import com.example.manageproducts.presentation.navigation.ProductListDestination
 import com.example.manageproducts.presentation.navigation.navRegistration
 import com.example.manageproducts.ui.theme.ManageProductsTheme
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.handleDeeplinks
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var supabaseClient: SupabaseClient
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supabaseClient.handleDeeplinks(intent = intent,
+        onSessionSuccess = { userSession ->
+            val a = 5
+        })
         setContent {
             ManageProductsTheme {
                 // A surface container using the 'background' color from the theme
