@@ -39,6 +39,8 @@ object SupabaseModule {
             install(Postgrest)
             install(GoTrue) {
                 flowType = FlowType.PKCE
+                host = "gizmos"
+                scheme = "example"
             }
             install(Storage)
         }
