@@ -38,7 +38,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun signInWithGoogle(): Boolean {
         return try {
-            goTrue.loginWith(Google, redirectUrl = "https://supabase.co" )
+            goTrue.loginWith(Google)
             true
         } catch (e: Exception) {
             false
