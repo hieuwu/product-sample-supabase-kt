@@ -5,6 +5,7 @@
     <application
         android:name=".ManageProductApplication"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -28,8 +29,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="example"
-                    android:host="gizmos" />
+                <data android:scheme="app"
+                    android:host="supabase.com" />
             </intent-filter>
         </activity>
     </application>
