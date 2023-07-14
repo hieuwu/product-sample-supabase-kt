@@ -7,6 +7,7 @@ import com.example.manageproducts.presentation.feature.addproduct.AddProductScre
 import com.example.manageproducts.presentation.feature.signin.SignInScreen
 import com.example.manageproducts.presentation.feature.productdetails.ProductDetailsScreen
 import com.example.manageproducts.presentation.feature.productlist.ProductListScreen
+import com.example.manageproducts.presentation.feature.signin.SignInSuccessScreen
 import com.example.manageproducts.presentation.feature.signup.SignUpScreen
 
 fun NavGraphBuilder.navRegistration(navController: NavController) {
@@ -28,19 +29,34 @@ fun NavGraphBuilder.navRegistration(navController: NavController) {
         )
     }
 
+    composable(
+        route = "${SuccessfulAuthDestination.route}/${SuccessfulAuthDestination.email}/${SuccessfulAuthDestination.createdAt}",
+        arguments = SuccessfulAuthDestination.arguments
+    ) { navBackStackEntry ->
+        val email = navBackStackEntry.arguments?.getString(SuccessfulAuthDestination.email) ?: ""
+        val createdAt =
+            navBackStackEntry.arguments?.getString(SuccessfulAuthDestination.createdAt) ?: ""
+        SignInSuccessScreen(
+            navController = navController,
+            email = email,
+            createdAt = createdAt
+        )
+    }
+
     composable(AddProductDestination.route) {
         AddProductScreen(
             navController = navController
         )
     }
 
-
-    composable(route = "${ProductDetailsDestination.route}/{${ProductDetailsDestination.productId}}",
-        arguments = ProductDetailsDestination.arguments) { navBackStackEntry ->
-        val productName =
+    composable(
+        route = "${ProductDetailsDestination.route}/{${ProductDetailsDestination.productId}}",
+        arguments = ProductDetailsDestination.arguments
+    ) { navBackStackEntry ->
+        val productId =
             navBackStackEntry.arguments?.getString(ProductDetailsDestination.productId)
         ProductDetailsScreen(
-            productId = productName,
+            productId = productId,
             navController = navController,
         )
     }

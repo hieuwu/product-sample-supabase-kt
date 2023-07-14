@@ -39,3 +39,21 @@ object SignUpDestination: Destination {
     override val route = "signup"
     override val title = "Sign Up"
 }
+
+object SuccessfulAuthDestination : Destination {
+    override val route = "successful_auth"
+    override val title = "Successful"
+    const val email = "email"
+    const val createdAt = "created_at"
+
+    val arguments = listOf(
+        navArgument(name = email) {
+            type = NavType.StringType
+        },
+        navArgument(name = createdAt) {
+            type = NavType.StringType
+        },
+        )
+    fun createRouteWithParam(email: String, createdAt: String) =
+        "$route/${email}/${createdAt}"
+}
