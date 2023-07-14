@@ -1,6 +1,7 @@
 package com.example.manageproducts
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -31,9 +32,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supabaseClient.handleDeeplinks(intent = intent,
-        onSessionSuccess = { userSession ->
-            val a = 5
-        })
+            onSessionSuccess = { userSession ->
+                Log.d("LOGIN", "Log in successfully with user info: ${userSession.user}")
+            })
         setContent {
             ManageProductsTheme {
                 // A surface container using the 'background' color from the theme
