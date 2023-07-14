@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.manageproducts.presentation.navigation.ProductListDestination
+import com.example.manageproducts.presentation.navigation.SignUpDestination
+import com.example.manageproducts.presentation.navigation.SuccessfulAuthDestination
 import com.example.manageproducts.presentation.navigation.navRegistration
 import com.example.manageproducts.ui.theme.ManageProductsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,14 +30,30 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var supabaseClient: SupabaseClient
 
+    var navigate: () -> Unit = {}
+    private lateinit var route: String
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supabaseClient.handleDeeplinks(intent = intent,
             onSessionSuccess = { userSession ->
                 Log.d("LOGIN", "Log in successfully with user info: ${userSession.user}")
+                route = userSession.user?.run {
+                    SuccessfulAuthDestination.createRouteWithParam(
+                        email = email ?: "",
+                        createdAt = createdAt.toString()
+                    )
+                } ?: ""
+                navigate()
             })
         setContent {
+            val navController = rememberNavController()
+            navigate = {
+                navController.navigate(
+                    route
+                )
+            }
             ManageProductsTheme {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
