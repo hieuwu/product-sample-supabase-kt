@@ -33,7 +33,7 @@ class DeepLinkHandlerActivity : ComponentActivity() {
         supabaseClient.handleDeeplinks(intent = intent,
             onSessionSuccess = { userSession ->
                 Log.d("LOGIN", "Log in successfully with user info: ${userSession.user}")
-                userSession.user?.run {
+                userSession.user?.apply {
                     callback(email ?: "", createdAt.toString())
                 }
             })
