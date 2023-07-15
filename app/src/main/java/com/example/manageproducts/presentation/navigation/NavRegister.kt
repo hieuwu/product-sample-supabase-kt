@@ -29,20 +29,6 @@ fun NavGraphBuilder.navRegistration(navController: NavController) {
         )
     }
 
-    composable(
-        route = "${SuccessfulAuthDestination.route}/${SuccessfulAuthDestination.email}/${SuccessfulAuthDestination.createdAt}",
-        arguments = SuccessfulAuthDestination.arguments
-    ) { navBackStackEntry ->
-        val email = navBackStackEntry.arguments?.getString(SuccessfulAuthDestination.email) ?: ""
-        val createdAt =
-            navBackStackEntry.arguments?.getString(SuccessfulAuthDestination.createdAt) ?: ""
-        SignInSuccessScreen(
-            navController = navController,
-            email = email,
-            createdAt = createdAt
-        )
-    }
-
     composable(AddProductDestination.route) {
         AddProductScreen(
             navController = navController
