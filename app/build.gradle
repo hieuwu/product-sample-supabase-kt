@@ -72,11 +72,13 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
     implementation "androidx.compose.material:material:$material_version"
-    
+
     // Supabase setup
-    implementation "io.github.jan-tennert.supabase:gotrue-kt:$supabase_version"
-    implementation "io.github.jan-tennert.supabase:postgrest-kt:$supabase_version"
-    implementation "io.github.jan-tennert.supabase:storage-kt:$supabase_version"
+    implementation(platform("io.github.jan-tennert.supabase:bom:$supabase_version"))
+    implementation "io.github.jan-tennert.supabase:gotrue-kt"
+    implementation "io.github.jan-tennert.supabase:postgrest-kt"
+    implementation "io.github.jan-tennert.supabase:storage-kt"
+
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-utils:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
@@ -87,7 +89,7 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version"
 
     // For instrumentation tests
-    androidTestImplementation  "com.google.dagger:hilt-android-testing:$hilt_version"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     androidTestAnnotationProcessor "com.google.dagger:hilt-compiler:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     implementation "com.google.android.gms:play-services-auth:$playservice_version"
