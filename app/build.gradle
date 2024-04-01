@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
@@ -57,42 +57,43 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation "androidx.core:core-ktx:$androidx_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.activity:activity-compose:$activity_compose_version"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha11'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation "androidx.compose.material3:material3:$material3_version"
+
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$ext_junit_verison"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha02'
-    implementation "androidx.compose.material:material:1.1.1"
-    
+    implementation "androidx.compose.material:material:$material_version"
+
     // Supabase setup
-    implementation "io.github.jan-tennert.supabase:gotrue-kt:2.0.0"
-    implementation "io.github.jan-tennert.supabase:postgrest-kt:2.0.0"
-    implementation "io.github.jan-tennert.supabase:storage-kt:2.0.0"
+    implementation(platform("io.github.jan-tennert.supabase:bom:$supabase_version"))
+    implementation "io.github.jan-tennert.supabase:gotrue-kt"
+    implementation "io.github.jan-tennert.supabase:postgrest-kt"
+    implementation "io.github.jan-tennert.supabase:storage-kt"
+
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-utils:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
-    implementation "io.coil-kt:coil-compose:1.3.2"
-
+    implementation "io.coil-kt:coil-compose:$coil_version"
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     annotationProcessor "com.google.dagger:hilt-compiler:$hilt_version"
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version"
 
     // For instrumentation tests
-    androidTestImplementation  "com.google.dagger:hilt-android-testing:$hilt_version"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     androidTestAnnotationProcessor "com.google.dagger:hilt-compiler:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+    implementation "com.google.android.gms:play-services-auth:$playservice_version"
 
-    implementation 'androidx.navigation:navigation-compose:2.5.3'
+    implementation "androidx.navigation:navigation-compose:$navigation_compose_version"
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.24.13-rc'
 }
