@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -50,7 +50,6 @@ fun AddProductScreen(
                         )
                     }
                 },
-                backgroundColor = MaterialTheme.colorScheme.primary,
                 title = {
                     Text(
                         text = stringResource(R.string.add_product_text_screen_title),
