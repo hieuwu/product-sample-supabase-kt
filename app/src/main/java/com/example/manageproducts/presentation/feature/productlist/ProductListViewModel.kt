@@ -2,12 +2,17 @@ package com.example.manageproducts.presentation.feature.productlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.manageproducts.data.repository.AuthenticationRepository
+import com.example.manageproducts.domain.model.AuthState
 import com.example.manageproducts.domain.model.Product
 import com.example.manageproducts.domain.usecase.DeleteProductUseCase
 import com.example.manageproducts.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,7 +20,14 @@ import javax.inject.Inject
 class ProductListViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
+    private val authRepository: AuthenticationRepository
 ) : ViewModel(), ProductListContract {
+
+    val authState: StateFlow<AuthState> = authRepository.authState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = AuthState.Initializing
+    )
 
     private val _productList = MutableStateFlow<List<Product>?>(listOf())
     override val productList: Flow<List<Product>?> = _productList
