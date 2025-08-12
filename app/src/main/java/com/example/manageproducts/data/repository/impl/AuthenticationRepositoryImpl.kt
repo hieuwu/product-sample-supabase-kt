@@ -1,9 +1,9 @@
 package com.example.manageproducts.data.repository.impl
 
 import com.example.manageproducts.data.repository.AuthenticationRepository
-import io.github.jan.supabase.gotrue.Auth
-import io.github.jan.supabase.gotrue.providers.Google
-import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.auth.providers.Google
+import io.github.jan.supabase.auth.providers.builtin.Email
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(

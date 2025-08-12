@@ -19,8 +19,9 @@ import com.example.manageproducts.presentation.feature.signin.SignInSuccessScree
 import com.example.manageproducts.ui.theme.ManageProductsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.gotrue.handleDeeplinks
+import io.github.jan.supabase.auth.handleDeeplinks
 import javax.inject.Inject
+import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
 class DeepLinkHandlerActivity : ComponentActivity() {
@@ -29,6 +30,8 @@ class DeepLinkHandlerActivity : ComponentActivity() {
     lateinit var supabaseClient: SupabaseClient
 
     private lateinit var callback: (String, String) -> Unit
+
+    @OptIn(ExperimentalTime::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supabaseClient.handleDeeplinks(intent = intent,
