@@ -2,9 +2,10 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
-    id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.1.20'
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.2.0'
+    id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
@@ -44,9 +45,6 @@ android {
     }
     buildFeatures {
         compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.5.2'
     }
     packagingOptions {
         resources {
@@ -91,7 +89,8 @@ dependencies {
     // For instrumentation tests
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     androidTestAnnotationProcessor "com.google.dagger:hilt-compiler:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    kapt ("com.google.dagger:hilt-compiler:$hilt_version")
+
     implementation "com.google.android.gms:play-services-auth:$playservice_version"
 
     implementation "androidx.navigation:navigation-compose:$navigation_compose_version"
