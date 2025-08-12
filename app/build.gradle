@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace 'com.example.manageproducts'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.example.manageproducts"
         minSdk 28
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -73,7 +73,7 @@ dependencies {
 
     // Supabase setup
     implementation(platform("io.github.jan-tennert.supabase:bom:$supabase_version"))
-    implementation "io.github.jan-tennert.supabase:gotrue-kt"
+    implementation "io.github.jan-tennert.supabase:auth-kt"
     implementation "io.github.jan-tennert.supabase:postgrest-kt"
     implementation "io.github.jan-tennert.supabase:storage-kt"
 
