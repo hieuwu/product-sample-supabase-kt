@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.manageproducts.data.repository.AuthenticationRepository
 import com.example.manageproducts.domain.model.AuthState
 import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -19,6 +20,7 @@ import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 
 private const val logTag = "AuthenticationRepository"
+
 class AuthenticationRepositoryImpl @Inject constructor(
     private val auth: Auth,
 ) : AuthenticationRepository {
@@ -50,7 +52,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun signUp(email: String, password: String): Boolean {
         return try {
-            auth.signUpWith(Email) {
+            auth.signUpWith(Email, "app://supabase.com/confirm") {
                 this.email = email
                 this.password = password
             }
@@ -105,5 +107,23 @@ class AuthenticationRepositoryImpl @Inject constructor(
             }
 
         }
+    }
+
+    override suspend fun exchangeCodeForSession(code: String): Result<Unit> =
+        runCatching {
+            auth.exchangeCodeForSession(code = code, saveSession = true)
+            return Result.success(Unit)
+        }.onFailure {
+            return Result.failure(it)
+        }
+
+    override suspend fun verifyEmail(tokenHash: String): Result<Unit> = runCatching {
+        auth.verifyEmailOtp(
+            type = OtpType.Email.EMAIL,
+            tokenHash = tokenHash
+        )
+        return Result.success(Unit)
+    }.onFailure { e ->
+        return Result.failure(e)
     }
 }

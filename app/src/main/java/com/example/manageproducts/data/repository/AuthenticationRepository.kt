@@ -8,4 +8,6 @@ interface AuthenticationRepository {
     suspend fun signIn(email: String, password: String): Boolean
     suspend fun signUp(email: String, password: String): Boolean
     suspend fun signInWithGoogle(): Boolean
+    suspend fun exchangeCodeForSession(code: String): Result<Unit>
+    suspend fun verifyEmail(tokenHash: String): Result<Unit>
 }
