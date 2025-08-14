@@ -1,10 +1,12 @@
-package com.example.manageproducts
+package com.example.manageproducts.presentation.feature.deeplink
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.example.manageproducts.MainActivity
+import com.example.manageproducts.presentation.feature.deeplink.state.RedirectDestination
 import com.example.manageproducts.presentation.feature.signin.SignInSuccessScreen
 import com.example.manageproducts.ui.theme.ManageProductsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +33,8 @@ class DeepLinkHandlerActivity : ComponentActivity() {
 
     @Inject
     lateinit var supabaseClient: SupabaseClient
+
+    private val viewModel: DeepLinkHandlerViewModel by viewModels()
 
     private lateinit var callback: (String, String) -> Unit
 
@@ -45,6 +52,20 @@ class DeepLinkHandlerActivity : ComponentActivity() {
             val navController = rememberNavController()
             val emailState = remember { mutableStateOf("") }
             val createdAtState = remember { mutableStateOf("") }
+            val state = viewModel.state.collectAsStateWithLifecycle().value
+            LaunchedEffect(Unit) {
+                handleDeepLink(intent)
+            }
+            LaunchedEffect(state.redirectDestination) {
+                when (state.redirectDestination) {
+                    is RedirectDestination.EmailConfirmation -> {
+                        // Success
+                        navigateToMainApp()
+                    }
+
+                    else -> Unit
+                }
+            }
             LaunchedEffect(Unit) {
                 callback = { email, created ->
                     emailState.value = email
@@ -73,6 +94,31 @@ class DeepLinkHandlerActivity : ComponentActivity() {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         startActivity(intent)
+    }
+
+    private fun handleDeepLink(intent: Intent) {
+        if (intent.action == Intent.ACTION_VIEW) {
+            val uri: Uri? = intent.data
+            uri?.let {
+                val tokenHash = it.getQueryParameter("token_hash")
+                val code = it.getQueryParameter("code") ?: ""
+                val actionPath = it.pathSegments.last()
+                if (tokenHash != null) {
+                    when (actionPath) {
+                        "confirm" -> {
+                            viewModel.verifyEmailConfirmation(tokenHash)
+                        }
+                    }
+                } else {
+                    when (actionPath) {
+                        "oauth" -> {
+                            viewModel.verifyGoogleAuth(code = code)
+                        }
+                    }
+                    println("Invalid deep link parameters")
+                }
+            }
+        }
     }
 }
 
