@@ -89,6 +89,8 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
             SessionStatus.Initializing -> {
                 Log.d(logTag, "SessionStatus: Initializing")
+                _authState.value = AuthState.Initializing
+
             }
 
 
@@ -104,6 +106,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                            IsSignOut: ${sessionStatus.isSignOut}
                     """.trimIndent()
                 )
+                _authState.value = AuthState.Unauthenticated
             }
 
         }
@@ -125,5 +128,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return Result.success(Unit)
     }.onFailure { e ->
         return Result.failure(e)
+    }
+
+    override suspend fun signOut() {
+        auth.signOut()
     }
 }

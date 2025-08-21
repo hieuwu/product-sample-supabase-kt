@@ -10,4 +10,5 @@ interface AuthenticationRepository {
     suspend fun signInWithGoogle(): Boolean
     suspend fun exchangeCodeForSession(code: String): Result<Unit>
     suspend fun verifyEmail(tokenHash: String): Result<Unit>
+    suspend fun signOut()
 }

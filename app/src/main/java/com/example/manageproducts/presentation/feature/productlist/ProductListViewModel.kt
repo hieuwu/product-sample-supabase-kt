@@ -46,6 +46,7 @@ class ProductListViewModel @Inject constructor(
                 is GetProductsUseCase.Output.Success -> {
                     _productList.emit(result.data)
                 }
+
                 is GetProductsUseCase.Output.Failure -> {
 
                 }
@@ -63,6 +64,12 @@ class ProductListViewModel @Inject constructor(
             deleteProductUseCase.execute(DeleteProductUseCase.Input(productId = product.id))
             // Then fetch again
             getProducts()
+        }
+    }
+
+    override fun signOut() {
+        viewModelScope.launch {
+            authRepository.signOut()
         }
     }
 }
