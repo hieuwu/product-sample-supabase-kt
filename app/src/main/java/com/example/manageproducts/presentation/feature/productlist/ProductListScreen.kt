@@ -27,8 +27,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.manageproducts.R
+import com.example.manageproducts.domain.model.AuthState
 import com.example.manageproducts.presentation.navigation.AddProductDestination
 import com.example.manageproducts.presentation.navigation.AuthenticationDestination
 import com.example.manageproducts.presentation.navigation.ProductDetailsDestination
@@ -63,6 +65,7 @@ fun ProductListScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+    val authState = viewModel.authState.collectAsStateWithLifecycle()
     SwipeRefresh(state = swipeRefreshState, onRefresh = { viewModel.getProducts() }) {
         Scaffold(
             topBar = {
@@ -70,10 +73,20 @@ fun ProductListScreen(
                     backgroundColor = MaterialTheme.colorScheme.primary,
                     title = {
                         Text(
-                            text = stringResource(R.string.product_list_text_screen_title),
+                            text = stringResource(R.string.product_list_text_screen_title) + " - " + authState.value.extractAuthState(),
                             color = MaterialTheme.colorScheme.onPrimary,
                         )
                     },
+                    actions = {
+                        Button(onClick = {
+                            viewModel.signOut()
+                        }) {
+                            Text(
+                                text = "Sign out",
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
+                        }
+                    }
                 )
             },
             floatingActionButton = {
@@ -81,9 +94,13 @@ fun ProductListScreen(
             }
         ) { padding ->
             Column(modifier = modifier.padding(paddingValues = padding)) {
-                androidx.compose.material3.Button(modifier = modifier.fillMaxWidth().padding(20.dp), onClick = {
-                    navController.navigate(AuthenticationDestination.route)
-                }) {
+                androidx.compose.material3.Button(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    onClick = {
+                        navController.navigate(AuthenticationDestination.route)
+                    }) {
                     Text("Authentication feature")
                 }
 
@@ -114,6 +131,7 @@ fun ProductListScreen(
                                             DismissDirection.EndToStart -> MaterialTheme.colorScheme.primary.copy(
                                                 alpha = 0.2f
                                             )
+
                                             null -> Color.Transparent
                                         }
                                     )
@@ -175,4 +193,10 @@ private fun AddProductButton(
             contentDescription = null,
         )
     }
+}
+
+private fun AuthState.extractAuthState() = when (this) {
+    AuthState.Authenticated -> "Authenticated"
+    AuthState.Initializing -> "Initializing"
+    AuthState.Unauthenticated -> "Unauthenticated"
 }

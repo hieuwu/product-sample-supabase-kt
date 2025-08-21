@@ -7,4 +7,5 @@ interface ProductListContract {
     val productList: Flow<List<Product>?>
     fun removeItem(product: Product)
     fun getProducts()
+    fun signOut()
 }

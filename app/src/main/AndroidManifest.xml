@@ -14,7 +14,7 @@
         android:theme="@style/Theme.ManageProducts"
         tools:targetApi="31">
         <activity
-            android:name=".DeepLinkHandlerActivity"
+            android:name=".presentation.feature.deeplink.DeepLinkHandlerActivity"
             android:exported="true"
             android:theme="@style/Theme.ManageProducts" >
             <intent-filter android:autoVerify="true">
@@ -23,6 +23,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="supabase.com"
+                    android:scheme="app" />
+                <data
+                    android:host="supabase.com"
+                    android:pathPrefix="/confirm"
                     android:scheme="app" />
             </intent-filter>
         </activity>
